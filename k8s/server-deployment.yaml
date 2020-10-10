@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-deployment
+
+spec:
+  replicas: 3
+
+  selector:
+      matchLabels:
+          component: server
+
+  template:
+    metadata:
+      labels:
+        component: server
+
+    spec:
+      containers:
+        - name: server-container
+          image: abdelrahman1993/multi-server:v2
+          env:
+          - name: MYSQL_HOST
+            value: "mysql-service"
+          - name: MYSQL_USER
+            value: "user123"
+          - name: MYSQL_PORT
+            value: "3306"
+          - name: MYSQL_DATABASE
+            value: "mysqlDB"
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysqlrootpassword
+                key: MYSQL_ROOT_PASSWORD
+            
+          - name: REDIS_HOST
+            value: "redis-service"
+          - name: REDIS_PORT
+            value: "6379"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 100m
+              memory: 100Mi
+          ports:
+            - containerPort: 5000

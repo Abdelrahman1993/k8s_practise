@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: client-deployment
+
+spec:
+  replicas: 3
+
+  selector: 
+    matchLabels: 
+      component: web
+
+  template:
+    metadata:
+      labels: 
+        component: web
+
+    spec:
+      containers:
+          - name: client-container
+            image: abdelrahman1993/multi-client
+            resources:
+              requests:
+                cpu: 100m
+                memory: 100Mi
+              limits:
+                cpu: 100m
+                memory: 100Mi
+            ports:
+              - containerPort: 3000
